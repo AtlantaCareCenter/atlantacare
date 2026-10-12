@@ -1,18 +1,18 @@
 ---
-import { getEntry } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import Callout from '../components/Callout.astro';
 import Wave from '../components/Wave.astro';
 import { md, mdInline, loadSite } from '../lib/md';
+import { normalizeHome, single, cssUrl } from '../lib/safe';
 
 await loadSite();
-const home = (await getEntry('singles', 'home'))!.data;
+const home = normalizeHome(await single('home'));
 const { hero, intro, services, callout } = home;
 ---
 <Base description={home.description}>
   <section class="hero">
-    <div class="photo" style={`background-image:url('${hero.image}')`} aria-hidden="true"></div>
+    {hero.image && <div class="photo" style={`background-image:${cssUrl(hero.image)}`} aria-hidden="true"></div>}
     <div class="hero-bean" aria-hidden="true"></div>
     <div class="container">
       <div class="content">
@@ -24,29 +24,29 @@ const { hero, intro, services, callout } = home;
     <Wave />
   </section>
 
-  <section class="home-intro">
+  {(intro.heading || intro.image) && <section class="home-intro">
     <div class="container wide">
       <div>
         <h2 set:html={mdInline(intro.heading)} />
         <p class="button-center"><Button href={intro.button_url} label={intro.button_label} /></p>
       </div>
-      <div><img src={intro.image} alt="" width="747" height="708" /></div>
+      {intro.image && <div><img src={intro.image} alt="" width="747" height="708" /></div>}
     </div>
-  </section>
+  </section>}
 
-  <section class="home-services">
-    <div class="bg" style={`background-image:url('${services.background_image}')`} aria-hidden="true"></div>
+  {(services.heading || services.items.length > 0) && <section class="home-services">
+    {services.background_image && <div class="bg" style={`background-image:${cssUrl(services.background_image)}`} aria-hidden="true"></div>}
     <Wave class="top" /><Wave class="bottom" />
     <div class="container wide">
       <h2>{services.heading} <span class="decorative">{services.script_heading}</span></h2>
       <ul class="service-icons">
         {services.items.map((it: any) => (
-          <li><a href={it.url}><h3>{it.title}</h3><img src={it.icon} alt="" loading="lazy" /></a></li>
+          <li><a href={it.url || undefined}><h3>{it.title}</h3>{it.icon && <img src={it.icon} alt="" loading="lazy" />}</a></li>
         ))}
       </ul>
       <Button href={services.button_url} label={services.button_label} />
     </div>
-  </section>
+  </section>}
 
-  <Callout {...callout} />
+  {callout.heading && <Callout {...callout} />}
 </Base>
