@@ -51,6 +51,19 @@ In headings, `**bold**` is bold and `*italic*` becomes the handwriting style.
   **Work with Local Repository** → pick this folder. Edits are written to disk
   and the dev server reloads.
 
+## Tests: nothing an editor saves can break the build
+
+```bash
+npm test     # about 15 seconds
+```
+
+`tests/content.test.mjs` copies the site to a temp folder, writes the kinds of content a
+careless, mischievous or random editor could save (blank and deleted fields, wrong types,
+broken markdown and HTML, colliding page names, everything deleted, hundreds of pages), and
+builds each. The content schema is deliberately forgiving: bad values are ignored and a
+section it can't understand is skipped with a `[content] skipped ...` warning in the
+Cloudflare build log, instead of failing the deploy. Run the tests before merging code.
+
 ## Going live (Cloudflare Pages + GitHub)
 
 1. The source lives at [acklenx/atlantacare](https://github.com/acklenx/atlantacare) (`main`).

@@ -13,7 +13,7 @@ const { sections = [] } = Astro.props;
     case 'text':
       if (s.background_image) return (
         <section class="text-bg">
-          <div class="bg" style={`background-image:url('${s.background_image}')`} aria-hidden="true" />
+          <div class="bg" style={`background-image:url('${encodeURI(s.background_image).replace(/'/g, '%27')}')`} aria-hidden="true" />
           <Wave class="top" /><Wave class="bottom" />
           <div class="container">
             <div class="prose" set:html={md(s.body)} />
@@ -66,7 +66,7 @@ const { sections = [] } = Astro.props;
       return (
         <section class="section faq">
           <div class="container">
-            {s.items.map((it: any) => (
+            {s.items.filter((it: any) => it.question).map((it: any) => (
               <details>
                 <summary>{it.question}</summary>
                 <div class="answer prose" set:html={md(it.answer)} />
@@ -82,7 +82,7 @@ const { sections = [] } = Astro.props;
           <div class="container contact-grid">
             <div class="prose">
               <h2 class="h3">Contact Our Pregnancy Clinic</h2>
-              <p>Phone: <a href={`tel:${site.phone}`}>{site.phone}</a></p>
+              {site.phone && <p>Phone: <a href={`tel:${site.phone}`}>{site.phone}</a></p>}
               <h2 class="h3">How to Find Our Clinic</h2>
               <p><a href={site.map_url} target="_blank" rel="noopener" set:html={site.address.replace(/\n/g, '<br>')} /></p>
             </div>

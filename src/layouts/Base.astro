@@ -30,7 +30,7 @@ const year = new Date().getFullYear();
   <meta property="og:title" content={pageTitle} />
   <meta property="og:type" content="website" />
   <meta property="og:image" content={new URL('/images/logo.png', Astro.site)} />
-  {(site.google_site_verification ?? []).map((v: any) => <meta name="google-site-verification" content={v.token} />)}
+  {site.google_site_verification.map((token) => <meta name="google-site-verification" content={token} />)}
   {site.gtm_id && <script is:inline define:vars={{ id: site.gtm_id }}>
     (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
     var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;
@@ -46,9 +46,9 @@ const year = new Date().getFullYear();
   </header>
 
   <div class="top-links">
-    <a class="phone" href={`tel:${site.phone}`}>{site.phone}</a>
-    <span class="sep phone" aria-hidden="true">|</span>
-    <a class="portal" href={site.portal_url} target="_blank" rel="noopener"><PortalIcon /> Patient Portal</a>
+    {site.phone && <a class="phone" href={`tel:${site.phone}`}>{site.phone}</a>}
+    {site.phone && site.portal_url && <span class="sep phone" aria-hidden="true">|</span>}
+    {site.portal_url && <a class="portal" href={site.portal_url} target="_blank" rel="noopener"><PortalIcon /> Patient Portal</a>}
   </div>
 
   <button class="menu-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
@@ -61,15 +61,15 @@ const year = new Date().getFullYear();
         {site.nav.map((item: any) => (
           <li>
             {item.url ? <a href={item.url} target={/^https?:/.test(item.url) ? '_blank' : undefined}>{item.label}</a> : <span>{item.label}</span>}
-            {item.children && <ul>{item.children.map((c: any) => <li><a href={c.url}>{c.label}</a></li>)}</ul>}
+            {item.children.length > 0 && <ul>{item.children.map((c: any) => <li><a href={c.url || undefined}>{c.label}</a></li>)}</ul>}
           </li>
         ))}
       </ul>
       <div class="nav-aside">
         <span class="decorative">contact</span>
-        <p><a href={`tel:${site.phone}`}>{site.phone}</a></p>
-        <p set:html={site.address.replace(/\n/g, '<br>')} />
-        <p><a href={site.portal_url} target="_blank" rel="noopener">Patient Portal</a></p>
+        {site.phone && <p><a href={`tel:${site.phone}`}>{site.phone}</a></p>}
+        {site.address && <p set:html={site.address.replace(/\n/g, '<br>')} />}
+        {site.portal_url && <p><a href={site.portal_url} target="_blank" rel="noopener">Patient Portal</a></p>}
         <Button href={site.booking_url} label="Book Now" />
       </div>
     </div>
@@ -94,9 +94,9 @@ const year = new Date().getFullYear();
           <div class="footer-contact">
             <span class="decorative">contact</span>
             <div class="grid">
-              <a href={`tel:${site.phone}`}>{site.phone}</a>
-              <a href={site.map_url} target="_blank" rel="noopener" set:html={site.address.replace(/\n/g, '<br>')} />
-              <a class="portal" href={site.portal_url} target="_blank" rel="noopener"><PortalIcon /> Patient Portal</a>
+              {site.phone && <a href={`tel:${site.phone}`}>{site.phone}</a>}
+              {site.address && <a href={site.map_url || undefined} target="_blank" rel="noopener" set:html={site.address.replace(/\n/g, '<br>')} />}
+              {site.portal_url && <a class="portal" href={site.portal_url} target="_blank" rel="noopener"><PortalIcon /> Patient Portal</a>}
             </div>
           </div>
         </div>
