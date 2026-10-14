@@ -37,5 +37,5 @@ callout:
     Schedule an
     *appointment*
   text: We make it easy to schedule a pregnancy test appointment at our office. **All appointments are confidential,** even if you are a minor.
-  button_label: Book Appointment Now
+  button_label: Book Now
   button_url: https://pp-wfe-102.advancedmd.com/153376/onlinescheduling/v2/patients
