@@ -2,34 +2,34 @@ hero:
   heading: Schedule an
   script_heading: appointment
   text: Call 404-870-0788 to schedule your pregnancy test appointment
+  image: /images/Hero-B.jpg
   button_label: Book Now
   button_url: https://pp-wfe-102.advancedmd.com/153376/onlinescheduling/v2/patients
-  image: /images/Hero-B.jpg
 intro:
   heading: |-
     **Call 404-870-0788** to Schedule a Free
     *Pregnancy Test*
     **and Consultation**
+  image: /images/Schedule-Listing.png
   button_label: Learn More
   button_url: /about/
-  image: /images/Schedule-Listing.png
 services:
   heading: Our
   script_heading: Services
   background_image: /images/Our-Services.jpg
   items:
-  - title: Free Pregnancy Test
-    icon: /images/icon-test.png
-    url: /services/free-pregnancy-test/
-  - title: Free Limited Ultrasound
-    icon: /images/icon-ultrasound-b.png
-    url: /services/free-ultrasound/
-  - title: Support Care Plan
-    icon: /images/icon-support.png
-    url: /services/support-care-plan/
-  - title: Already a Parent?
-    icon: /images/icon-parent.png
-    url: /services/already-a-parent/
+    - title: Free Pregnancy Test
+      icon: /images/icon-test.png
+      url: /services/free-pregnancy-test/
+    - title: Free Limited Ultrasound
+      icon: /images/icon-ultrasound-b.png
+      url: /services/free-ultrasound/
+    - title: Support Care Plan
+      icon: /images/icon-support.png
+      url: /services/support-care-plan/
+    - title: Already a Parent?
+      icon: /images/icon-parent.png
+      url: /services/already-a-parent/
   button_label: Learn More
   button_url: /services/
 callout:
@@ -37,5 +37,5 @@ callout:
     Schedule an
     *appointment*
   text: We make it easy to schedule a pregnancy test appointment at our office. **All appointments are confidential,** even if you are a minor.
-  button_label: Book Now
+  button_label: Book Appointment Now
   button_url: https://pp-wfe-102.advancedmd.com/153376/onlinescheduling/v2/patients
