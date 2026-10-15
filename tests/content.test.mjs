@@ -132,3 +132,17 @@ scenario('every page gets an /admin/ shortcut into the editor', (t, sb) => {
   assert.match(sb.html('/admin/'), /sveltia-cms\.js/, 'the editor itself is still at /admin/');
   assert.doesNotMatch(sb.read('dist/sitemap-0.xml'), /\/admin\//, 'shortcuts stay out of the sitemap');
 });
+
+// ---------------------------------------------------------------- "More buttons": second and third calls to action
+scenario('sections can carry several buttons, and junk in that list is ignored', (t, sb) => {
+  sb.page('multi', `---\ntitle: Multi\nsections:\n- _template: callout\n  heading: Join us\n  button_label: Book a Visit\n  button_url: /book/\n  buttons:\n  - label: Call Us\n    url: tel:4048700788\n  - label: Directions\n    url: https://example.org/map\n- _template: text\n  body: Only extra buttons, no main one\n  buttons:\n  - label: Second\n    url: /two/\n- _template: callout\n  heading: Junk\n  buttons:\n  - {}\n  - label: ''\n    url: /nolabel/\n  - 42\n  - label: Kept\n- _template: text\n  body: junk list\n  buttons: "not a list"\n---\n`);
+  mustBuild(t, sb);
+  const html = sb.html('/multi/');
+  const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
+  const links = [...main.matchAll(/<a href="([^"]*)" class="button"[^>]*>\s*<span class="text-wrap">([^<]*)<\/span>/g)].map((m) => `${m[2]} -> ${m[1]}`);
+  assert.deepEqual(links.slice(0, 3), ['Book a Visit -> /book/', 'Call Us -> tel:4048700788', 'Directions -> https://example.org/map'], 'main button first, then the extra ones in order');
+  assert.ok(links.includes('Second -> /two/'), 'a text block with only extra buttons still shows them');
+  assert.ok(links.some((l) => l.startsWith('Book Now -> ')), 'a call to action without button text still says Book Now');
+  assert.ok(links.some((l) => l.startsWith('Kept -> ')), 'a button without a link goes to the booking link');
+  assert.ok(!main.includes('/nolabel/'), 'a button without text is dropped');
+});

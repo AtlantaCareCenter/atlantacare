@@ -98,6 +98,16 @@ collections:
                 hint: "Leave blank for no button." }
               - &btn_url { label: Button link, name: button_url, widget: string, required: false,
                 hint: "Leave blank to use the online booking link from Site Settings." }
+              - &btn_more
+                label: More buttons
+                name: buttons
+                widget: list
+                required: false
+                summary: "{{fields.label}}"
+                hint: "Optional. Adds a second or third button next to the one above."
+                fields:
+                  - { label: Button text, name: label, widget: string }
+                  - { label: Button link, name: url, widget: string }
           - label: Second section
             name: intro
             widget: object
@@ -106,6 +116,7 @@ collections:
               - { label: Photo, name: image, widget: image }
               - *btn_label
               - *btn_url
+              - *btn_more
           - label: Services section
             name: services
             widget: object
@@ -123,6 +134,7 @@ collections:
                   - { label: Link, name: url, widget: string }
               - *btn_label
               - *btn_url
+              - *btn_more
           - label: Bottom call to action
             name: callout
             widget: object
@@ -132,6 +144,7 @@ collections:
               - &cta_label { label: Button text, name: button_label, widget: string, required: false,
                 hint: "Leave blank to show “Book Now”." }
               - *btn_url
+              - *btn_more
           - { label: Search engine description, name: description, widget: string, required: false }
 
   - name: pages
@@ -168,6 +181,7 @@ collections:
                   - { label: Text under heading, name: text, widget: markdown, required: false, minimal: true }
                   - *cta_label
                   - *btn_url
+                  - *btn_more
               - label: Text block
                 name: text
                 summary: "{{fields.body | truncate(60)}}"
@@ -179,6 +193,7 @@ collections:
                       options: [{ label: "No", value: 1 }, { label: "Yes", value: 3 }] }
                   - *btn_label
                   - *btn_url
+                  - *btn_more
               - label: Two columns
                 name: two_column
                 summary: "Two columns"

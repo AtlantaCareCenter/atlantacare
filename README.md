@@ -54,6 +54,8 @@ In headings, `**bold**` is bold and `*italic*` becomes the handwriting style.
 - On a laptop, open `http://localhost:8171/admin/` in Chrome/Edge and choose
   **Work with Local Repository** → pick this folder. Edits are written to disk
   and the dev server reloads.
+- **Buttons:** "Button text/link" is a section's main button; **More buttons** adds a second
+  or third one beside it. It exists on every page section and home section that has a button.
 - **Shortcut:** add `admin/` to any page's address to open that page in the editor, e.g.
   `www.atlantacare.com/team/admin/` or `.../services/free-ultrasound/admin/`. (The home page
   and Site Settings are a click away from `/admin/` itself.)

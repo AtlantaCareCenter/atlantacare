@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import Button from '../components/Button.astro';
+import Buttons from '../components/Buttons.astro';
 import Callout from '../components/Callout.astro';
 import Wave from '../components/Wave.astro';
 import { md, mdInline, loadSite } from '../lib/md';
@@ -18,7 +18,7 @@ const { hero, intro, services, callout } = home;
       <div class="content">
         <h1>{hero.heading}<br /><span class="decorative">{hero.script_heading}</span></h1>
         <div class="prose" set:html={md(hero.text)} />
-        <Button href={hero.button_url} label={hero.button_label} />
+        <Buttons label={hero.button_label} url={hero.button_url} more={hero.buttons} />
       </div>
     </div>
     <Wave />
@@ -28,7 +28,7 @@ const { hero, intro, services, callout } = home;
     <div class="container wide">
       <div>
         <h2 set:html={mdInline(intro.heading)} />
-        <p class="button-center"><Button href={intro.button_url} label={intro.button_label} /></p>
+        <Buttons label={intro.button_label} url={intro.button_url} more={intro.buttons} class="button-center" />
       </div>
       {intro.image && <div><img src={intro.image} alt="" width="747" height="708" /></div>}
     </div>
@@ -44,7 +44,7 @@ const { hero, intro, services, callout } = home;
           <li><a href={it.url || undefined}><h3>{it.title}</h3>{it.icon && <img src={it.icon} alt="" loading="lazy" />}</a></li>
         ))}
       </ul>
-      <Button href={services.button_url} label={services.button_label} />
+      <Buttons label={services.button_label} url={services.button_url} more={services.buttons} class="button-center" />
     </div>
   </section>}
 

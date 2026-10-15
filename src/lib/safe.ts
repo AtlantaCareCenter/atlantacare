@@ -38,19 +38,22 @@ export function normalizeSite(raw: unknown) {
   };
 }
 
+/** The "More buttons" list of a section: items with a label, in order. */
+export const buttons = (v: unknown) => arr(obj(v).buttons).map((b) => ({ label: str(obj(b).label), url: str(obj(b).url) })).filter((b) => b.label);
+
 export function normalizeHome(raw: unknown) {
   const h = obj(raw);
   const hero = obj(h.hero), intro = obj(h.intro), services = obj(h.services), callout = obj(h.callout);
   return {
     description: str(h.description),
-    hero: { heading: str(hero.heading), script_heading: str(hero.script_heading), text: str(hero.text), image: str(hero.image), button_label: str(hero.button_label), button_url: str(hero.button_url) },
-    intro: { heading: str(intro.heading), image: str(intro.image), button_label: str(intro.button_label), button_url: str(intro.button_url) },
+    hero: { heading: str(hero.heading), script_heading: str(hero.script_heading), text: str(hero.text), image: str(hero.image), button_label: str(hero.button_label), button_url: str(hero.button_url), buttons: buttons(hero) },
+    intro: { heading: str(intro.heading), image: str(intro.image), button_label: str(intro.button_label), button_url: str(intro.button_url), buttons: buttons(intro) },
     services: {
       heading: str(services.heading), script_heading: str(services.script_heading), background_image: str(services.background_image),
       items: arr(services.items).map((i) => ({ title: str(obj(i).title), icon: str(obj(i).icon), url: str(obj(i).url) })).filter((i) => i.title),
-      button_label: str(services.button_label), button_url: str(services.button_url),
+      button_label: str(services.button_label), button_url: str(services.button_url), buttons: buttons(services),
     },
-    callout: { heading: str(callout.heading), text: str(callout.text), button_label: str(callout.button_label), button_url: str(callout.button_url) },
+    callout: { heading: str(callout.heading), text: str(callout.text), button_label: str(callout.button_label), button_url: str(callout.button_url), buttons: buttons(callout) },
   };
 }
 
