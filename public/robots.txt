@@ -1,3 +1,4 @@
+# www.atlantacare.com is public: index everything except the editor.
 User-agent: *
 Allow: /
 Disallow: /admin/

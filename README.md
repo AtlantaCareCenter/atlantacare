@@ -50,6 +50,13 @@ In headings, `**bold**` is bold and `*italic*` becomes the handwriting style.
 - On a laptop, open `http://localhost:8171/admin/` in Chrome/Edge and choose
   **Work with Local Repository** → pick this folder. Edits are written to disk
   and the dev server reloads.
+- Required fields are marked `*`. If Save is refused because something is missing or
+  invalid, a banner at the top names each field (click one to jump to it), the page scrolls
+  to the first one and every one of them flashes red until it's fixed. That is
+  `public/admin/editor-help.js`, a small add-on that only watches the editor's own
+  "This field is required" notes, so a Sveltia update can't break it.
+  `npm run test:editor` drives the real editor in headless Chrome to check it
+  (needs Chrome and `npm i --no-save puppeteer-core`).
 
 ## Tests: nothing an editor saves can break the build
 
@@ -63,6 +70,14 @@ broken markdown and HTML, colliding page names, everything deleted, hundreds of 
 builds each. The content schema is deliberately forgiving: bad values are ignored and a
 section it can't understand is skipped with a `[content] skipped ...` warning in the
 Cloudflare build log, instead of failing the deploy. Run the tests before merging code.
+
+## Search engines
+
+This site should be found by everyone. Every page is indexable (no robots meta tag), the
+build writes `sitemap-index.xml` (`@astrojs/sitemap` in `astro.config.mjs`, editor left
+out), and `public/robots.txt` points to it. Only `/admin/` is hidden (meta tag plus an
+`X-Robots-Tag` header in `public/_headers`). The tests check all of this. The sister site
+supportatlantacare.com is the opposite: private, noindex everywhere, no sitemap.
 
 ## Going live (Cloudflare Pages + GitHub)
 

@@ -93,3 +93,27 @@ scenario('hundreds of pages', (t, sb) => {
   for (let i = 0; i < 300; i++) sb.page(`p-${i}`, `---\ntitle: Page ${i}\nsections:\n- _template: faq\n  items:\n  - question: q${i}\n    answer: a\n---\n`);
   mustBuild(t, sb);
 });
+
+// ---------------------------------------------------------------- public site: findable by everyone
+scenario('pages are indexable, the sitemap exists and leaves out the editor', (t, sb) => {
+  mustBuild(t, sb);
+  for (const route of ['/', '/about/']) {
+    const html = sb.html(route);
+    assert.doesNotMatch(html, /<meta name="robots"/, `${route} carries no robots restriction`);
+    assert.match(html, /<link rel="canonical" href="https:\/\/www\.atlantacare\.com\//);
+  }
+  assert.match(sb.html('/admin/'), /<meta name="robots" content="noindex, nofollow"/, 'only the editor is hidden');
+  const robots = sb.read('dist/robots.txt');
+  assert.match(robots, /^Allow: \/$/m); assert.match(robots, /^Disallow: \/admin\/$/m);
+  assert.match(robots, /^Sitemap: https:\/\/www\.atlantacare\.com\/sitemap-index\.xml$/m);
+  assert.ok(sb.exists('dist/sitemap-index.xml'), 'sitemap index is generated');
+  const sitemap = sb.read('dist/sitemap-0.xml');
+  assert.match(sitemap, /<loc>https:\/\/www\.atlantacare\.com\/<\/loc>/);
+  assert.match(sitemap, /<loc>https:\/\/www\.atlantacare\.com\/about\/<\/loc>/);
+  assert.doesNotMatch(sitemap, /\/admin\//, 'editor is not in the sitemap');
+  assert.doesNotMatch(sitemap, /\/404\//);
+  assert.match(sb.read('dist/_headers'), /^\/admin\/\*\n\s+X-Robots-Tag: noindex, nofollow/m);
+  assert.doesNotMatch(sb.read('dist/_headers'), /^\/\*\n(\s+.*\n)*\s+X-Robots-Tag/m, 'the public pages get no X-Robots-Tag');
+  assert.match(sb.read('dist/humans.txt'), /\/\* TEAM \*\//);
+  assert.ok(sb.exists('dist/admin/editor-help.js'), 'editor add-on ships with the site');
+});
