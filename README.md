@@ -24,6 +24,10 @@ npm install
 npm run dev            # site at http://localhost:8171, editor at /admin/
 ```
 
+To try the editor against your working copy (no GitHub involved), open `/admin/` in
+Chrome/Edge, choose **Work with Local Repository** and pick this folder. To try a pull
+request before merging, check out its branch in your clone and run the same thing.
+
 ## How editing works
 
 Every page is made of a small set of blocks the editor understands:
@@ -81,7 +85,10 @@ supportatlantacare.com is the opposite: private, noindex everywhere, no sitemap.
 
 ## Going live (Cloudflare Pages + GitHub)
 
-1. The source lives at [acklenx/atlantacare](https://github.com/acklenx/atlantacare) (`main`).
+1. The source lives at [AtlantaCareCenter/atlantacare](https://github.com/AtlantaCareCenter/atlantacare)
+   (`main`), owned by the Atlanta Care Center GitHub organization. The editor commits straight to it.
+   Code changes come in as pull requests from a fork (currently acklenx/atlantacare): branch in the
+   fork, open a PR against the org repo, an org owner merges it and Cloudflare deploys `main`.
 2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick the repo.
    - Build command: `npm run build`
    - Output directory: `dist`
