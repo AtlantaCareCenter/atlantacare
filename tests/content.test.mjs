@@ -117,3 +117,18 @@ scenario('pages are indexable, the sitemap exists and leaves out the editor', (t
   assert.match(sb.read('dist/humans.txt'), /\/\* TEAM \*\//);
   assert.ok(sb.exists('dist/admin/editor-help.js'), 'editor add-on ships with the site');
 });
+
+// ---------------------------------------------------------------- "/admin" after any page url opens that page in the editor
+scenario('every page gets an /admin/ shortcut into the editor', (t, sb) => {
+  mustBuild(t, sb);
+  const target = (route) => sb.html(route + 'admin/').match(/<meta http-equiv="refresh" content="0; url=([^"]+)"/)?.[1];
+  assert.equal(target('/about/'), '/admin/#/collections/pages/entries/about');
+  assert.equal(target('/services/'), '/admin/#/collections/pages/entries/services', 'the Services overview page is a top-level page');
+  assert.equal(target('/services/free-ultrasound/'), '/admin/#/collections/services/entries/free-ultrasound', 'sub-folder collection wins over the parent');
+  assert.equal(target('/womens-health/abortion/'), '/admin/#/collections/womens_health/entries/abortion');
+  const html = sb.html('/about/admin/');
+  assert.match(html, /const url = "\/admin\/#\/collections\/pages\/entries\/about";\s*location\.replace\(url\)/, 'script redirect too, for browsers that ignore meta refresh');
+  assert.match(html, /<meta name="robots" content="noindex, nofollow"/);
+  assert.match(sb.html('/admin/'), /sveltia-cms\.js/, 'the editor itself is still at /admin/');
+  assert.doesNotMatch(sb.read('dist/sitemap-0.xml'), /\/admin\//, 'shortcuts stay out of the sitemap');
+});
