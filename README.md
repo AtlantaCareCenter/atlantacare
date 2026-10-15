@@ -24,6 +24,10 @@ npm install
 npm run dev            # site at http://localhost:8171, editor at /admin/
 ```
 
+To try the editor against your working copy (no GitHub involved), open `/admin/` in
+Chrome/Edge, choose **Work with Local Repository** and pick this folder. To try a pull
+request before merging, check out its branch in your clone and run the same thing.
+
 ## How editing works
 
 Every page is made of a small set of blocks the editor understands:
@@ -50,6 +54,18 @@ In headings, `**bold**` is bold and `*italic*` becomes the handwriting style.
 - On a laptop, open `http://localhost:8171/admin/` in Chrome/Edge and choose
   **Work with Local Repository** → pick this folder. Edits are written to disk
   and the dev server reloads.
+- **Buttons:** "Button text/link" is a section's main button; **More buttons** adds a second
+  or third one beside it. It exists on every page section and home section that has a button.
+- **Shortcut:** add `admin/` to any page's address to open that page in the editor, e.g.
+  `www.atlantacare.com/team/admin/` or `.../services/free-ultrasound/admin/`. (The home page
+  and Site Settings are a click away from `/admin/` itself.)
+- Required fields are marked `*`. If Save is refused because something is missing or
+  invalid, a banner at the top names each field (click one to jump to it), the page scrolls
+  to the first one and every one of them flashes red until it's fixed. That is
+  `public/admin/editor-help.js`, a small add-on that only watches the editor's own
+  "This field is required" notes, so a Sveltia update can't break it.
+  `npm run test:editor` drives the real editor in headless Chrome to check it
+  (needs Chrome and `npm i --no-save puppeteer-core`).
 
 ## Tests: nothing an editor saves can break the build
 
@@ -64,9 +80,20 @@ builds each. The content schema is deliberately forgiving: bad values are ignore
 section it can't understand is skipped with a `[content] skipped ...` warning in the
 Cloudflare build log, instead of failing the deploy. Run the tests before merging code.
 
+## Search engines
+
+This site should be found by everyone. Every page is indexable (no robots meta tag), the
+build writes `sitemap-index.xml` (`@astrojs/sitemap` in `astro.config.mjs`, editor left
+out), and `public/robots.txt` points to it. Only `/admin/` is hidden (meta tag plus an
+`X-Robots-Tag` header in `public/_headers`). The tests check all of this. The sister site
+supportatlantacare.com is the opposite: private, noindex everywhere, no sitemap.
+
 ## Going live (Cloudflare Pages + GitHub)
 
-1. The source lives at [acklenx/atlantacare](https://github.com/acklenx/atlantacare) (`main`).
+1. The source lives at [AtlantaCareCenter/atlantacare](https://github.com/AtlantaCareCenter/atlantacare)
+   (`main`), owned by the Atlanta Care Center GitHub organization. The editor commits straight to it.
+   Code changes come in as pull requests from a fork (currently acklenx/atlantacare): branch in the
+   fork, open a PR against the org repo, an org owner merges it and Cloudflare deploys `main`.
 2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick the repo.
    - Build command: `npm run build`
    - Output directory: `dist`

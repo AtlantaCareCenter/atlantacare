@@ -48,7 +48,9 @@ const list = <T extends z.ZodTypeAny>(item: T, where: string) =>
     });
   }, z.array(z.any()));
 
-const button = { button_label: text, button_url: text };
+/** "More buttons": a second or third call to action next to the main one. */
+const moreButtons = list(z.preprocess(obj, z.object({ label: text, url: text })), 'extra button');
+const button = { button_label: text, button_url: text, buttons: moreButtons };
 
 // One markdown file per page. Nested folders become nested URLs
 // (services/free-ultrasound.md -> /services/free-ultrasound/).

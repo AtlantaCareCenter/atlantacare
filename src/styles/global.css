@@ -104,6 +104,9 @@ strong { font-weight: 700; }
 .button:hover .stroke, .button:focus-visible .stroke { transform: translateY(2px) scaleX(1.03); }
 .button:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
 .button-center { text-align: center; }
+/* a section's buttons (main one + "More buttons") sit side by side, wrapping on small screens */
+.buttons { display: flex; flex-wrap: wrap; gap: .75rem 1rem; align-items: center; }
+.buttons.button-center, .callout .buttons, .hero .buttons { justify-content: center; }
 
 /* ---------- header / logo ---------- */
 .site-header {
